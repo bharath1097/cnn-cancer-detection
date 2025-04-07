@@ -1,0 +1,9 @@
+* Try multiple models with different complexity and normalization
+* See how accuracy scales with model complexity
+* See how accuracy scales with training time (epochs)
+* See how accuracy scales with training data
+* Look at the input pixel data and see if we can spot any correlation
+* Try with and without balancing the classes
+* Try with both sigmoid and softmax
+* Have some utility functions so we can deal with all these differences
+* Try preexisting models with and without transfer learning
