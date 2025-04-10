@@ -23,11 +23,11 @@ def load_training_labels(data_dir='./', num_samples=None, balanced=False):
     return training_labels
 
 
-def get_training_images(training_labels, data_dir='./', color_mode='rgb', crop=False):
+def get_training_images(training_labels, data_dir='./', color_mode='rgb', crop=1.0):
     images = np.array(
         [tf.image.central_crop(
             keras.utils.img_to_array(keras.utils.load_img(os.path.join(data_dir, 'train', f'{id}.tif'), color_mode=color_mode)),
-            1/3 if crop else 1).numpy()
+            crop).numpy()
          for id in training_labels['id']])
     return images
 
@@ -51,13 +51,13 @@ def stochastic_batch_image_generator(training_labels, batch_size):
         yield batch_images, batch_labels['label']
 
 
-def get_test_images(data_dir='./', color_mode='rgb', crop=False):
+def get_test_images(data_dir='./', color_mode='rgb', crop=1.0):
     test_image_files = [f for f in os.listdir(os.path.join(data_dir, "test")) if f.endswith(".tif")]
     test_ids = [Path(f).stem for f in test_image_files]
     test_images = np.array(
         [tf.image.central_crop(
             keras.utils.img_to_array(keras.utils.load_img(os.path.join(data_dir, 'test', f), color_mode=color_mode)),
-            1/3 if crop else 1).numpy()
+            crop).numpy()
          for f in test_image_files])
     return test_images, test_ids
 
@@ -65,7 +65,7 @@ def get_test_images(data_dir='./', color_mode='rgb', crop=False):
 def generate_submission(model, test_images, test_ids, color_mode='rgb', output_file='submission.csv'):
     test_predictions = model.predict(test_images)
     submission_probs = pd.DataFrame({"id": test_ids, "label": test_predictions.flatten()})
-    binary_predictions = (test_predictions > 0.5).astype("int32")
-    submission_binary = pd.DataFrame({"id": test_ids, "label": binary_predictions.flatten()})
+    #binary_predictions = (test_predictions > 0.5).astype("int32")
+    #submission_binary = pd.DataFrame({"id": test_ids, "label": binary_predictions.flatten()})
     submission_probs.to_csv(output_file, index=False)
-    submission_binary.to_csv(output_file.replace('.csv', '_binary.csv'), index=False)
+    #submission_binary.to_csv(output_file.replace('.csv', '_binary.csv'), index=False)

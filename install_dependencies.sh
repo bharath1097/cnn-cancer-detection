@@ -1,6 +1,6 @@
 #!/bin/env bash
 
-pip install matplotlib numpy pandas tensorflow kaggle
+pip install matplotlib numpy pandas tensorflow[and-cuda] scikit-learn kaggle
 mkdir -p ~/.kaggle
 echo '{"username":"tvuser","key":"d53f35c01dcc2be525eba8c0c36b9378"}' > ~/.kaggle/kaggle.json
 chmod 600 ~/.kaggle/kaggle.json
